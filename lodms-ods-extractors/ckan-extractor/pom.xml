@@ -66,8 +66,8 @@
 
     <repositories>
         <repository>
-            <id>tenforce_archiva_external_free</id>
-            <url>http://archiva.tenforce.com/archiva/repository/external_free/</url>
+            <id>linkeddata</id>
+            <url>http://mvn.linkeddata.org/content/groups/public/</url>
         </repository>
         <repository>
             <id>com.springsource.repository.bundles.release</id>
