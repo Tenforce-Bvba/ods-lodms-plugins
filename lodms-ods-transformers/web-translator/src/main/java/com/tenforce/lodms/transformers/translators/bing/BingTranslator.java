@@ -131,7 +131,7 @@ public class BingTranslator implements TranslationApi {
       return createTranslatedStatements(statements, responseArray.getTranslateResponses(), requestBody.getTo());
     } catch (HttpStatusCodeException e) {
       if (isZeroBalance(e))
-        throw new TranslationException("bing account is out of balance");
+        throw new TranslationException("bing account is out of balance" + e.getResponseBodyAsString());
       if (e.getStatusCode().equals(HttpStatus.BAD_REQUEST) && retries > 0) {
         warnings.add(e.getStatusText());
         logger.error(e.getStatusCode() + ": " + e.getStatusText());

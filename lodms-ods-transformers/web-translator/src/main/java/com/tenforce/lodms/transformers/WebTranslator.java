@@ -58,10 +58,12 @@ public class WebTranslator extends TransformerBase<TranslatorConfig> implements 
       List<TranslatedStatement> translatedStatements = buildTranslationsFromCache(toBeTranslated, cache);
       logger.info(translatedStatements.size() + " translations generated from cache");
       logger.info(toBeTranslated.size() + " new literals to be translated");
-      Collection<TranslatedStatement> newTranslations = api.translateStatements(toBeTranslated);
-      context.getWarnings().addAll(api.getWarnings());
-      cache.addTranslations(newTranslations);
-      translatedStatements.addAll(newTranslations);
+      if (toBeTranslated.size() >0) {
+        Collection<TranslatedStatement> newTranslations = api.translateStatements(toBeTranslated);
+        context.getWarnings().addAll(api.getWarnings());
+        cache.addTranslations(newTranslations);
+        translatedStatements.addAll(newTranslations);
+      }
       insertTranslatedStatements(repository, graph, translatedStatements);
     } catch (Exception e) {
       throw new TransformException(e);
