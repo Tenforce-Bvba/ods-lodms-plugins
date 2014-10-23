@@ -14,8 +14,6 @@ import com.vaadin.terminal.Resource;
 import org.apache.log4j.Logger;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
@@ -42,7 +40,8 @@ public class VirtuosoLoader extends ConfigurableBase<VirtuosoLoaderConfig> imple
                 if (config.isVersioned())
                     copyGraph(connection, destinationGraph, getBackupGraph(destinationGraph), false);
                 copyGraph(connection, uri, destinationGraph, true);
-            } finally {
+            }
+             finally {
                 connection.close();
             }
 
@@ -63,13 +62,9 @@ public class VirtuosoLoader extends ConfigurableBase<VirtuosoLoaderConfig> imple
             String query = "define sql:log-enable 3 " + action + " <" + orgGraph + "> TO <" + destGraph + ">";
             connection.prepareGraphQuery(QueryLanguage.SPARQL, query).evaluate();
             connection.commit();
-            connection.close();
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
+            logger.error(e.getMessage());
             throw new LoadException(e.getMessage(), e);
-        } catch (QueryEvaluationException e) {
-            logger.error(e.getMessage());
-        } catch (MalformedQueryException e) {
-            logger.error(e.getMessage());
         }
     }
 
