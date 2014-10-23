@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -25,6 +26,7 @@ public class DataSetHarvester implements Runnable {
   private List<String> warnings;
   private CountDownLatch barrier;
   private Logger logger = Logger.getLogger(DataSetHarvester.class);
+  private HttpMethod httpMethod;
 
   public DataSetHarvester(Catalog catalog, MapToRdfConverter converter, RDFHandler handler, String apiUri, String dataSetId, CountDownLatch barrier, List<String> warnings, HttpMethod httpMethod) {
     this.apiUri = apiUri + "action/package_show?id={datasetId}";
@@ -34,13 +36,16 @@ public class DataSetHarvester implements Runnable {
     this.handler = handler;
     this.warnings = warnings;
     this.barrier = barrier;
+    this.httpMethod = httpMethod;
   }
 
   @Override
   public void run() {
     try {
-      HttpEntity<?> httpEntity = new HttpEntity<Object>(RestTemplateFactory.getHttpHeaders());
-      ResponseEntity<CkanDataSet> dataSetResponseEntity = rest.exchange(apiUri, HttpMethod.GET, httpEntity, CkanDataSet.class, dataSetId);
+      HashMap map = new HashMap<String, String>();
+      map.put("id", dataSetId);
+      HttpEntity<?> httpEntity = new HttpEntity<Object>(map,RestTemplateFactory.getHttpHeaders());
+      ResponseEntity<CkanDataSet> dataSetResponseEntity = rest.exchange(apiUri, httpMethod, httpEntity, CkanDataSet.class, dataSetId);
       CkanDataSet dataSet = dataSetResponseEntity.getBody();
       if (dataSet.success) {
         converter.convert(dataSet.getResult(), catalog.generateDatasetUri(dataSetId).stringValue());
