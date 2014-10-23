@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>lodms-ods-extractors</artifactId>
+        <groupId>at.punkt.lodms</groupId>
+        <version>1.0.1</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.tenforce.lodms</groupId>
-    <artifactId>ckan-extractor</artifactId>
-    <name>LODMS Ckan Extractor</name>
-    <url>http://www.github.com/nvdk/ods-lodms-plugins</url>
-    <version>1.0.2</version>
+
+    <groupId>at.punkt.lodms</groupId>
+    <artifactId>dcat-protocol-extractor</artifactId>
+    <version>1.0.1</version>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lodms.version>1.0.1</lodms.version>
         <jackson.version>1.7.1</jackson.version>
         <sesame.version>2.7.3</sesame.version>
@@ -43,43 +47,26 @@
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.github.jsonld-java</groupId>
+            <artifactId>jsonld-java-sesame</artifactId>
+            <version>0.5.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
             <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openrdf.sesame</groupId>
-            <artifactId>sesame-queryparser-sparql</artifactId>
-            <version>${sesame.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.tenforce.lodms</groupId>
-            <artifactId>ods-vocabulary</artifactId>
-            <version>1.0.3</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin</artifactId>
-            <version>6.8.9</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>linkeddata</id>
-            <url>http://mvn.linkeddata.org/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>com.springsource.repository.bundles.release</id>
-            <name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
-            <url>http://repository.springsource.com/maven/bundles/release</url>
-        </repository>
-        <repository>
-            <id>com.springsource.repository.bundles.external</id>
-            <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
-            <url>http://repository.springsource.com/maven/bundles/external</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
@@ -93,15 +80,6 @@
                     <encoding>utf-8</encoding>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.4.3</version>
-                <configuration>
-                    <encoding>utf-8</encoding>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
-
 </project>
