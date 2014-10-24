@@ -1,0 +1,170 @@
+{  "@context":
+  {
+    "@vocab": "http://data.opendatasupport.eu/vocab/",
+    "datasets": "http://www.w3.org/ns/dcat#dataset",
+    "Record": "http://www.w3.org/ns/dcat#Record",
+    "dcterms"  : "http://purl.org/dc/terms/",
+    "xsd"  : "http://www.w3.org/2001/XMLSchema#",
+    "dcat" : "http://www.w3.org/ns/dcat#",
+    "void" : "http://rdfs.org/ns/void#",
+    "skos" : "http://www.w3.org/2004/02/skos/core#",
+    "vcard" : "http://www.w3.org/2006/vcard/ns#",
+    "rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "adms": "http://www.w3.org/ns/adms",
+    "void": "http://rdfs.org/ns/void#",
+    "id": "@id",
+    "title" : {
+      "@id": "dcterms:title",
+      "@container" : "@language"
+    },
+    "description" : {
+      "@id" : "dcterms:description",
+      "@container" : "@language"
+    },
+    "modified" : "dcterms:modified",
+    "issued" : "dcterms:issued",
+    "periodicity" : {
+      "@id" : "dcterms:accrualPeriodicity"
+    },
+    "language" : {
+      "@id" : "dcterms:language",
+      "@type" : "xsd:string"
+    },
+    "mainTheme" : {
+      "@id" : "tf:mainTheme"
+    },
+    "theme" : {
+      "@id" : "dcat:theme"
+    },
+    "themeName": {
+      "@id":"skos:prefLabel"
+    },
+    "keywordList" : {
+      "@id" : "dcat:keyword"
+    },
+    "contactPoint" : {
+      "@id" : "dcat:contactPoint"
+    },
+    "landingPage" : {
+      "@id" : "dcterms:landingPage"
+    },
+    "conformsTo" : {
+      "@id" : "void:vocabulary",
+      "@type" : "@id"
+    },
+    "spatial" : {
+      "@id" : "dcterms:spatial"
+    },
+    "distribution" : {
+      "@id" : "dcat:distribution"
+    },
+    "publisher" : {
+      "@id" : "dcterms:publisher"
+    },
+    "temporalPeriod" : {
+      "@id" : "dcterms:temporal"
+    },
+    "record" : {
+      "@id" : "dcat:record"
+    },
+    "schema" : {
+      "@id" : "skos:inScheme"
+    },
+    "label" : {
+      "@id" : "skos:prefLabel"
+    },
+    "contactName" : {
+      "@id" : "vcard:fn"
+    },
+    "publisherName": {
+      "@id": "foaf:name"
+    },
+    "mail" : {
+      "@id" : "vcard:hasEmail",
+      "@type" : "@id"
+    },
+    "phone" : {
+      "@id" : "vcard:hasTelephone"
+    },
+    "web" : {
+      "@id" : "vcard:hasURL",
+      "@type" : "@id"
+    },
+    "mimeType" : {
+      "@id" : "dcat:mediaType",
+      "@type" : "xsd:string"
+    },
+    "format" : {
+      "@id" : "dcterms:format",
+      "@type" : "xsd:string"
+    },
+    "downloadURL" : {
+      "@id" : "dcat:downloadURL",
+      "@type" : "@id"
+    },
+    "accessURL" : {
+      "@id" : "dcat:accessURL",
+      "@type" : "@id"
+    },
+    "byteSize" : {
+      "@id" : "dcat:byteSize",
+      "@type" : "xsd:integer"
+    },
+    "license" : {
+      "@id" : "dcterms:license",
+      "@type" : "@id"
+    },
+    "rights" : {
+      "@id" : "dcterms:rights",
+      "@type" : "@id"
+    },
+    "shortText" :{
+      "@id" : "rdfs:label",
+      "@container" : "@language"
+    },
+    "notBefore" :{
+      "@id" : "tf:notBefore"
+    },
+    "before" :{
+      "@id" : "tf:before"
+    },
+    "keyword" : {
+      "@id" : "dcat:keyword",
+      "@type" : "xsd:string",
+      "@container": "@language"
+    },
+    "icon" : {
+      "@id" : "tf:icon",
+      "@type" : "@id"
+    },
+    "version" : {
+    "@id" : "adms:version",
+    "@type" : "xsd:string"
+    },
+    "versionNotes" : {
+      "@id" : "adms:versionNotes",
+      "@container" : "@language"
+    },
+    "vocabularies": {
+      "@type":"@id",
+      "@id": "void:vocabulary"
+    },
+    "identifier": {
+      "@id": "dcterms:identifier",
+      "@type": "@id"
+    },
+    "class": {
+      "@id" : "void:class",
+      "@type": "@id"
+    },
+    "type": "@type",
+    "type": {
+        "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "@type": "@id"
+        },
+    "self": "@id",
+    "uri": "@id"
+  },
+  "@type": "Catalog"
+}

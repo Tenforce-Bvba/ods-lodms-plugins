@@ -11,6 +11,7 @@ import com.github.jsonldjava.sesame.SesameTripleCallback;
 import com.vaadin.Application;
 import com.vaadin.terminal.ClassResource;
 import com.vaadin.terminal.Resource;
+import org.openrdf.model.Statement;
 import org.openrdf.model.impl.ValueFactoryImpl;
 import org.openrdf.rio.ParserConfig;
 import org.openrdf.rio.RDFHandler;
@@ -25,6 +26,7 @@ import java.util.*;
 
 public class DcatProtocolExtractor extends ConfigurableBase<DcatProtocolExtractorConfig> implements Extractor, UIComponent, ConfigBeanProvider<DcatProtocolExtractorConfig> {
     private List<String> warnings = new ArrayList<String>();
+    private BlankNodeNuker nuker;
 
     @Override
     public DcatProtocolExtractorConfig newDefaultConfig() {
@@ -33,17 +35,24 @@ public class DcatProtocolExtractor extends ConfigurableBase<DcatProtocolExtracto
 
     @Override
     protected void configureInternal(DcatProtocolExtractorConfig config) throws ConfigurationException {
-
+        nuker = new BlankNodeNuker(config.getJsonContext());
     }
 
     @Override
     public void extract(RDFHandler handler, ExtractContext context) throws ExtractException {
         try {
-            Object response = new Object();
+            Map response = new HashMap();
             int page = 1;
-            while (response != null) {
+            int hashcode = Integer.MIN_VALUE; // should improve this
+            while (response != null && hashcode != response.hashCode()) {
+                hashcode = response.hashCode();
                 response = getJson(page++);
-                parseResponse(handler, response);
+                SimpleRdfHandler simpleHandler = new SimpleRdfHandler();
+                parseResponse(simpleHandler, response);
+                nuker.nukeBlankNodes(simpleHandler.getStatements());
+                for (Statement statement : simpleHandler.getStatements()) {
+                    handler.handleStatement(statement);
+                }
             }
         } catch (Exception e) {
             throw new ExtractException(e.getMessage(), e.getCause());
@@ -55,14 +64,14 @@ public class DcatProtocolExtractor extends ConfigurableBase<DcatProtocolExtracto
 
     /**
      * Retrieve a page of datasets from the dcat endpoint
-     * @param page
+     * @param page the page requested
      * @return the json wrapped in an object, null if the page could not be retrieved
      */
-    private Object getJson(int page) {
+    private Map getJson(int page) {
         try {
             RestTemplate rest = getRestTemplate();
             HttpEntity<?> httpEntity = new HttpEntity<Object>(getHttpHeaders());
-            ResponseEntity<Object> dataSetResponseEntity = rest.exchange(pageUrl(), HttpMethod.GET, httpEntity, Object.class, page);
+            ResponseEntity<Map> dataSetResponseEntity = rest.exchange(pageUrl(), HttpMethod.GET, httpEntity, Map.class, page);
             return dataSetResponseEntity.getBody();
         }
         catch (RestClientException e) {
@@ -90,14 +99,14 @@ public class DcatProtocolExtractor extends ConfigurableBase<DcatProtocolExtracto
     /**
      * builds HttpHeaders for the resttemplate client.
      * This sets the correct user agent, content-type etc
-     * @return
+     * @return HttpHeaders
      */
     private HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.<MediaType>asList(MediaType.APPLICATION_JSON));
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("User-Agent", "LODMS DCAT spec harvesting plugin");
-        headers.setAcceptCharset(Arrays.<Charset>asList(Charset.forName("UTF-8")));
+        headers.setAcceptCharset(Arrays.asList(Charset.forName("UTF-8")));
         return headers;
     }
 
@@ -107,9 +116,11 @@ public class DcatProtocolExtractor extends ConfigurableBase<DcatProtocolExtracto
      * @param json object representation of the json message
      * @throws JsonLdError
      */
-    private void parseResponse(RDFHandler handler, Object json) throws JsonLdError {
+    private void parseResponse(RDFHandler handler, Map json) throws JsonLdError {
         SesameTripleCallback callback = new SesameTripleCallback(handler, ValueFactoryImpl.getInstance(), new ParserConfig(), null);
         JsonLdOptions options = new JsonLdOptions("http://data.opendatasupport.eu/raw/");
+        json.put("@context",getConfig().getJsonContext().toString());
+
         JsonLdProcessor.toRDF(json, callback, options);
     }
 
