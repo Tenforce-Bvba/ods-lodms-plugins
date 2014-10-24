@@ -5,6 +5,7 @@ import java.net.URL;
 public class DcatProtocolExtractorConfig {
     private URL jsonContext = this.getClass().getClassLoader().getResource("context.jsonld");
     private String dcatProtocolEndpoint = "";
+    private String catalogReference = "";
 
     public String getDcatProtocolEndpoint() {
         return dcatProtocolEndpoint;
@@ -20,5 +21,13 @@ public class DcatProtocolExtractorConfig {
 
     public void setJsonContext(URL jsonContext) {
         this.jsonContext = jsonContext;
+    }
+
+    public String getCatalogReference() {
+        return catalogReference;
+    }
+
+    public void setCatalogReference(String catalogReference) {
+        this.catalogReference = catalogReference;
     }
 }

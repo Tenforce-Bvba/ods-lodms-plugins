@@ -84,6 +84,9 @@
       "@id" : "vcard:hasEmail",
       "@type" : "@id"
     },
+    "mbox": "foaf:mbox",
+    "homepage": "foaf:homepage",
+    "name":"foaf:name",
     "phone" : {
       "@id" : "vcard:hasTelephone"
     },

@@ -23,7 +23,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
 import java.util.*;
-
+/**
+ * This class provides a lodms extractor to extract data from Data Catalog Interoperability Protocol
+ */
 public class DcatProtocolExtractor extends ConfigurableBase<DcatProtocolExtractorConfig> implements Extractor, UIComponent, ConfigBeanProvider<DcatProtocolExtractorConfig> {
     private List<String> warnings = new ArrayList<String>();
     private BlankNodeNuker nuker;
@@ -119,6 +121,7 @@ public class DcatProtocolExtractor extends ConfigurableBase<DcatProtocolExtracto
     private void parseResponse(RDFHandler handler, Map json) throws JsonLdError {
         SesameTripleCallback callback = new SesameTripleCallback(handler, ValueFactoryImpl.getInstance(), new ParserConfig(), null);
         JsonLdOptions options = new JsonLdOptions("http://data.opendatasupport.eu/raw/");
+        json.put("@id",getConfig().getCatalogReference());
         json.put("@context",getConfig().getJsonContext().toString());
 
         JsonLdProcessor.toRDF(json, callback, options);
@@ -127,12 +130,12 @@ public class DcatProtocolExtractor extends ConfigurableBase<DcatProtocolExtracto
 
     @Override
     public String getName() {
-        return "Dcat Protocol Exctractor";
+        return "Data Catalog Interoperability Protocol Exctractor";
     }
 
     @Override
     public String getDescription() {
-        return "Harvest catalog metadata from an endpoint using the datacalalog specification (http://spec.datacatalogs.org/).";
+        return "Harvest catalog metadata from an endpoint using the Data Catalog Interoperability Protocol specification (http://spec.datacatalogs.org/).";
     }
 
     @Override
