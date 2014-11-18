@@ -8,6 +8,7 @@ import com.github.jsonldjava.core.JsonLdError;
 import com.github.jsonldjava.core.JsonLdOptions;
 import com.github.jsonldjava.core.JsonLdProcessor;
 import com.github.jsonldjava.sesame.SesameTripleCallback;
+import com.tenforce.lodms.ODSVoc;
 import com.vaadin.Application;
 import com.vaadin.terminal.ClassResource;
 import com.vaadin.terminal.Resource;
@@ -43,7 +44,7 @@ public class DcatProtocolExtractor extends ConfigurableBase<DcatProtocolExtracto
     @Override
     public void extract(RDFHandler handler, ExtractContext context) throws ExtractException {
         try {
-            Map response = new HashMap();
+            Object response = new HashMap();
             int page = 1;
             int hashcode = Integer.MIN_VALUE; // should improve this
             while (response != null && hashcode != response.hashCode()) {
@@ -69,11 +70,11 @@ public class DcatProtocolExtractor extends ConfigurableBase<DcatProtocolExtracto
      * @param page the page requested
      * @return the json wrapped in an object, null if the page could not be retrieved
      */
-    private Map getJson(int page) {
+    private Object getJson(int page) {
         try {
             RestTemplate rest = getRestTemplate();
             HttpEntity<?> httpEntity = new HttpEntity<Object>(getHttpHeaders());
-            ResponseEntity<Map> dataSetResponseEntity = rest.exchange(pageUrl(), HttpMethod.GET, httpEntity, Map.class, page);
+            ResponseEntity<Object> dataSetResponseEntity = rest.exchange(pageUrl(), HttpMethod.GET, httpEntity, Object.class, page);
             return dataSetResponseEntity.getBody();
         }
         catch (RestClientException e) {
@@ -118,12 +119,19 @@ public class DcatProtocolExtractor extends ConfigurableBase<DcatProtocolExtracto
      * @param json object representation of the json message
      * @throws JsonLdError
      */
-    private void parseResponse(RDFHandler handler, Map json) throws JsonLdError {
+    private void parseResponse(RDFHandler handler, Object json) throws JsonLdError {
         SesameTripleCallback callback = new SesameTripleCallback(handler, ValueFactoryImpl.getInstance(), new ParserConfig(), null);
         JsonLdOptions options = new JsonLdOptions("http://data.opendatasupport.eu/raw/");
-        json.put("@id",getConfig().getCatalogReference());
-        json.put("@context",getConfig().getJsonContext().toString());
-
+        if (json instanceof List) {
+            HashMap<String,Object> newJson = new HashMap<String,Object>();
+            newJson.put("datasets",json);
+            json = newJson;
+        }
+        if (json instanceof Map) {
+            ((Map) json).put("@id",getConfig().getCatalogReference());
+            ((Map) json).put("@context",getConfig().getJsonContext().toString());
+            ((Map) json).put("@type", ODSVoc.DCAT_CATALOG.toString());
+        }
         JsonLdProcessor.toRDF(json, callback, options);
     }
 
