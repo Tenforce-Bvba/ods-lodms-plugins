@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>lodms-ods-extractors</artifactId>
+    <groupId>at.punkt.lodms</groupId>
+    <version>1.0.1</version>
+  </parent>
+  <properties>
+    <lodms.version>1.0.1</lodms.version>
+  </properties>
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.tenforce.lodms</groupId>
+  <artifactId>crip-api-extractor</artifactId>
+  <version>1.0.1</version>
+  <dependencies>
+    <dependency>
+      <groupId>at.punkt.lodms</groupId>
+      <artifactId>lodms-spi</artifactId>
+      <version>${lodms.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>at.punkt.lodms</groupId>
+      <artifactId>lodms-web-integration</artifactId>
+      <version>${lodms.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.tenforce.lodms</groupId>
+      <artifactId>ods-vocabulary</artifactId>
+      <version>1.0.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.tenforce.lodms</groupId>
+      <artifactId>ods-resources</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+  </dependencies>
+
+</project>
